@@ -49,6 +49,9 @@ print_expr(int pr, int opn)
 #if NARGS >= 2
    else if (opn == RY) printb(pr, "y");     // Second argument.
 #endif
+#if NARGS >= 3
+   else if (opn == RZ) printb(pr, "z");     // Third argument.
+#endif
    else {                               // opn is an instruction.
       i = opn - RI0;
       k = pgm[i].op;
@@ -79,8 +82,11 @@ print_pgm(int pr)
             else printb(pr, "0x%X", opndj);
          }
          else if (opndj == RX) printb(pr, "rx");
-#if NARGS > 1
+#if NARGS >= 2
          else if (opndj == RY) printb(pr, "ry");
+#endif
+#if NARGS >= 3
+         else if (opndj == RZ) printb(pr, "rz");
 #endif
          else printb(pr, "r%d", opndj - RI0 + 1);
          if (j < isa[k].numopnds - 1) printb(pr, ",");
@@ -120,18 +126,26 @@ check(int i)
 {
 
    static int itrialx;          // Init 0.
-#if NARGS == 2
-   static int itrialy;
-#endif
    int kx;
+#if NARGS >= 2
+   static int itrialy;
+   int ky;
+#endif
+#if NARGS >= 3
+   static int itrialz;
+   int kz;
+#endif
 
    if (debug) {
 #if NARGS == 1
       fprintf(ofile, "\nSimulating with trial arg x = %d (0x%X):\n",
          r[RX],r[RX]);
-#else
+#elif NARGS == 2
       fprintf(ofile, "\nSimulating with (x, y) = (%d, %d) ((0x%X, 0x%X)):\n",
          r[RX], r[RY], r[RX], r[RY]);
+#elif NARGS == 3
+      fprintf(ofile, "\nSimulating with (x, y, z) = (%d, %d, %d) ((0x%X, 0x%X, 0x%X)):\n",
+         r[RX], r[RY], r[RZ], r[RX], r[RY], r[RZ]);
 #endif
    }
 L:
@@ -154,18 +168,31 @@ L:
    // Got the correct result.  Check this program using all trial values.
 
    for (kx = 0; kx < NTRIALX - 1; kx++) {
-      itrialx += 1;
-      if (itrialx >= NTRIALX) itrialx = 0;
-      r[RX] = trialx[itrialx];
+     itrialx += 1;
+     if (itrialx >= NTRIALX) itrialx = 0;
+#if NARGS >= 2
+     for (ky = 0; ky < NTRIALY - 1; ky++) {
+       itrialy += 1;
+       if (itrialy >= NTRIALY) itrialy = 0;
+#if NARGS >= 3
+       for (kz = 0; kz < NTRIALZ - 1; kz++) {
+         itrialz += 1;
+         if (itrialz >= NTRIALZ) itrialz = 0;
+#endif
+#endif
+
 #if NARGS == 1
-      corr_result = correct_result[itrialx];
-#else
-   for (int ky = 0; ky < NTRIALY - 1; ky++) {
-      itrialy += 1;
-      if (itrialy >= NTRIALY) itrialy = 0;
-      r[RX] = trialx[itrialx];
-      r[RY] = trialy[itrialy];
-      corr_result = correct_result[itrialx][itrialy];
+           r[RX] = trialx[itrialx];
+           corr_result = correct_result[itrialx];
+#elif NARGS == 2
+           r[RX] = trialx[itrialx];
+           r[RY] = trialy[itrialy];
+           corr_result = correct_result[itrialx][itrialy];
+#elif NARGS == 3
+           r[RX] = trialx[itrialx];
+           r[RY] = trialy[itrialy];
+           r[RZ] = trialz[itrialz];
+           corr_result = correct_result[itrialx][itrialy][itrialz];
 #endif
 
       /* Now we simulate the current program, i.e., the instructions
@@ -176,9 +203,12 @@ L:
 #if NARGS == 1
          fprintf(ofile, "\nContinuing this pgm with arg x = %d (0x%X):\n",
             r[RX], r[RX]);
-#else
+#elif NARGS == 2
          fprintf(ofile, "\nContinuing this pgm with (x, y) = (%d, %d) ((0x%X, 0x%X)):\n",
             r[RX], r[RY], r[RX], r[RY]);
+#elif NARGS == 3
+         fprintf(ofile, "\nContinuing this pgm with (x, y, z) = (%d, %d, %d) ((0x%X, 0x%X, 0x%X)):\n",
+            r[RX], r[RY], r[RZ], r[RX], r[RY], r[RZ]);
 #endif
       }
       for (i = 0; i < numi; i++) {      // Simulate program from
@@ -191,8 +221,12 @@ L:
          r[numi+RI0-1], corr_result, r[numi+RI0-1] == corr_result ? "ok" : "fail");
       }
       if (r[numi+RI0-1] != corr_result) return 0;
-#if NARGS == 2
-   }  // end ky
+
+#if NARGS >= 3
+       }  // end kz
+#endif
+#if NARGS >= 2
+     }  // end ky
 #endif
    }  // end kx
    return 1;                    // Passed all tests, found a
@@ -427,10 +461,15 @@ search(void)
 #if NARGS == 1
    r[RX] = trialx[0];                   // Must initialize these for
    corr_result = correct_result[0];     // speed-up thing in "check."
-#else
+#elif NARGS == 2
    r[RX] = trialx[0];
    r[RY] = trialy[0];
    corr_result = correct_result[0][0];
+#elif NARGS == 3
+   r[RX] = trialx[0];
+   r[RY] = trialy[0];
+   r[RZ] = trialz[0];
+   corr_result = correct_result[0][0][0];
 #endif
    num_solutions = 0;
    i = 0;
@@ -451,7 +490,7 @@ search(void)
 int
 main(int argc, char *argv[])
 {
-   int i, num_sol;
+   int i, j, k, num_sol;
    clock_t t_start, t_finish;
    char *end_num;       // End of number, set by strtol.
 
@@ -485,9 +524,13 @@ main(int argc, char *argv[])
    for (i = 0; i < NTRIALX; i++) {
 #if NARGS == 1
       correct_result[i] = userfun(trialx[i]);
-#else
-      for (int j = 0; j < NTRIALY; j++)
+#elif NARGS == 2
+      for (j = 0; j < NTRIALY; j++)
          correct_result[i][j] = userfun(trialx[i], trialy[j]);
+#elif NARGS == 3
+      for (k = 0; k < NTRIALZ; k++)
+         for (j = 0; j < NTRIALY; j++)
+            correct_result[i][j][k] = userfun(trialx[i], trialy[j], trialz[k]);
 #endif
    }
 

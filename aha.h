@@ -22,6 +22,7 @@ holds the results of computations done by the trial programs.
 NIM      Start of shift immediate values    (those given by SHIMMEDS)
 RX       First (or only) user function argument
 RY       Second user function argument
+RZ       Third user function argument
 RI0      Result of instruction 0 goes here
 RI0 + i  Result of instruction i goes here
 where:
@@ -30,8 +31,11 @@ NSHIM = number of shift immediate values
 */
 
 static const int trialx[] = TRIAL;
-#if NARGS == 2
+#if NARGS >= 2
 static const int trialy[] = TRIAL;
+#endif
+#if NARGS >= 3
+static const int trialz[] = TRIAL;
 #endif
 
 int dummy1[] = {IMMEDS};        // These get optimized out of existence.
@@ -42,6 +46,7 @@ int dummy2[] = {SHIMMEDS};
 #define NSHIM NELEMS(dummy2)
 #define RX (NIM + NSHIM)        // First (or only) user function argument
 #define RY (RX + 1)             // Second user function argument
+#define RZ (RY + 1)             // Third user function argument
 #define RI0 (RX + NARGS)        // Result of instruction 0 goes here
 
 int unacceptable;               // Code below sets this to 1 for an
@@ -68,17 +73,24 @@ isa_t;
 #define MAXNUMI 5               // Max num of insns that can be tried.
 #if NARGS == 1
 int userfun(int);
-#else
+#elif NARGS == 2
 int userfun(int, int);
+#elif NARGS == 3
+int userfun(int, int, int);
+#else
+#error Invalid NARGS
 #endif
 
 #define NTRIALX NELEMS(trialx)
 #define NTRIALY NELEMS(trialy)
+#define NTRIALZ NELEMS(trialz)
 
 #if NARGS == 1
    int correct_result[NTRIALX];
-#else
+#elif NARGS == 2
    int correct_result[NTRIALX][NTRIALY];
+#elif NARGS == 3
+   int correct_result[NTRIALX][NTRIALY][NTRIALZ];
 #endif
 
 int corr_result;                // Correct result for current trial.
