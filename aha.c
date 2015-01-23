@@ -7,6 +7,8 @@
 #include <time.h>
 #include INC
 
+#define INLINE static inline
+
 FILE *ofile;
 
 // ----------------------------- printb --------------------------------
@@ -105,7 +107,7 @@ print_pgm(int pr)
 
 // -------------------- simulate_one_instruction -----------------------
 
-inline void
+INLINE void
 simulate_one_instruction(int i)
 {
    int arg0, arg1, arg2;
@@ -342,7 +344,7 @@ more unused computed values; it hasn't been tried. */
 
 // --------------------------- increment -------------------------------
 
-inline int
+INLINE int
 increment(void)
 {
 
