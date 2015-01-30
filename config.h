@@ -16,8 +16,8 @@
                0x000F0000, 0x00F00000, 0x0F000000, 0xF0000000}
 
 // First three values of IMMEDS must be 0, -1, and 1.
-#define IMMEDS 0, -1, 1, MAXNEG
-#define SHIMMEDS 1, 30, 31
+#define IMMEDS 0, -1, 1, -2, 2, MAXNEG
+#define SHIMMEDS 1, 2, 3, 30, 31
 
 #endif /* CONFIG_H */
 
