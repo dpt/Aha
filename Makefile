@@ -5,7 +5,7 @@ EXAMPLE = example
 CC	= gcc
 CXX	= g++
 DEFINES = -DINC=\"$(EXAMPLE).frag.c\" -DOFILE=\"$(EXAMPLE).out\"
-CFLAGS	=  -O2 -Wall -MMD -I. $(DEFINES)
+CFLAGS	=  -O2 -Wall -Wno-unused-variable -MMD -I. $(DEFINES)
 CXXFLAGS = $(CFLAGS)
 
 SRCS	= aha.c simulator.c
