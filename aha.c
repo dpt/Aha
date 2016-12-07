@@ -122,7 +122,7 @@ simulate_one_instruction(int i)
    arg2 = r[pgm[i].opnd[2]];
 
    r[i + RI0] = (*isa[pgm[i].op].proc)(arg0, arg1, arg2);
-   if (counters) counter[i] = counter[i] + 1;
+   if (counters) counter[i]++;
    return;
 }
 
@@ -483,7 +483,7 @@ search(void)
    do {
       ok = check(i);            // Simulate the program from i on.
       if (ok) {
-         num_solutions += 1;
+         num_solutions++;
          printb(3, "\nFound a %d-operation program:\n", numi);
          print_pgm(3);
       }
@@ -566,8 +566,8 @@ main(int argc, char *argv[])
       unsigned long long total = 0;
       printb(3, "Counters = ");
       for (i = 0; i < numi; i++) {
-         total = total + counter[i];
          printb(3, "%llu, ", counter[i]);
+         total += counter[i];
       }
       printb(3, "total = %llu\n", total);
    }
