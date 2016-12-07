@@ -78,10 +78,15 @@ print_pgm(int pr)
       printb(pr, "   %-5s r%d,", isa[k].mnemonic, i + 1);
       for (j = 0; j < isa[k].numopnds; j++) {
          opndj = pgm[i].opnd[j];
-         if (opndj < RX) {
+         if (opndj < NSHIM) {
             opndj = r[opndj];
             if (opndj >= -31 && opndj <= 31) printb(pr, "%d", opndj);
             else printb(pr, "0x%X", opndj);
+         }
+         else if (opndj < RX) {
+            // shift immediates
+            opndj = r[opndj];
+            printb(pr, "#%d", opndj);
          }
          else if (opndj == RX) printb(pr, "rx");
 #if NARGS >= 2
