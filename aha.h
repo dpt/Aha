@@ -113,5 +113,4 @@ slots hold the arguments x and, optionally, y, and the last numi slots
 hold the result of instructions 0 through numi - 1. */
 
 int r[NIM + NSHIM + NARGS + MAXNUMI] = {IMMEDS, SHIMMEDS};
-unsigned counter[MAXNUMI];        // Count num times insn at level i is
-                                  // evaluated.
+unsigned long long counter[MAXNUMI];    // Count num times insn at level i is evaluated.

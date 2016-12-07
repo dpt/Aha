@@ -563,13 +563,13 @@ main(int argc, char *argv[])
    t_finish = clock();
    printb(3, "Found %d solutions.\n", num_sol);
    if (counters) {
-      int total = 0;
+      unsigned long long total = 0;
       printb(3, "Counters = ");
       for (i = 0; i < numi; i++) {
-         printb(3, "%d, ", counter[i]);
          total = total + counter[i];
+         printb(3, "%llu, ", counter[i]);
       }
-      printb(3, "total = %d\n", total);
+      printb(3, "total = %llu\n", total);
    }
    printb(3, "Process time = %.3f secs\n", (double)(t_finish - t_start)/CLOCKS_PER_SEC);
    return 0;
