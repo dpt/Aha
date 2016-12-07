@@ -530,8 +530,8 @@ main(int argc, char *argv[])
       for (j = 0; j < NTRIALY; j++)
          correct_result[i][j] = userfun(trialx[i], trialy[j]);
 #elif NARGS == 3
-      for (k = 0; k < NTRIALZ; k++)
-         for (j = 0; j < NTRIALY; j++)
+      for (j = 0; j < NTRIALY; j++)
+         for (k = 0; k < NTRIALZ; k++)
             correct_result[i][j][k] = userfun(trialx[i], trialy[j], trialz[k]);
 #endif
    }
