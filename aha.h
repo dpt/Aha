@@ -4,7 +4,7 @@
 #include "simulator.h"
 
 #ifndef NARGS
-#define NARGS 1                 // Number of args in userfun, 1 or 2.
+#define NARGS 1                 // Number of args in userfun, 1, 2 or 3.
 #endif
 
 const int debug = 0;            // 0 or 1; debugging printouts if 1.

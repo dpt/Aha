@@ -33,6 +33,7 @@ static const isa_t isa[] = {
 // {seleq,  3, 0, {RX,  0,  0}, "seleq", "seleq(", ", " },  // Select if = 0.
 // {sellt,  3, 0, {RX,  0,  0}, "sellt", "sellt(", ", " },  // Select if < 0.
 // {selle,  3, 0, {RX,  0,  0}, "selle", "selle(", ", " },  // Select if <= 0.
+    {revb,   1, 0, {RX,   0, 0}, "revb",   "revb(",  ""     }, // Byte reversal.
 };
 
 #endif /* MACHINE_H */

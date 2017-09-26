@@ -43,6 +43,13 @@ int rev(int xi, int y, int z) {
    return x;
 }
 
+int revb(int xi, int y, int z) {
+   unsigned x = xi;
+   return ((x & 0x000000FF) << 24) | ((x >> 24) & 0x000000FF) |
+          ((x & 0x0000FF00) <<  8) | ((x >>  8) & 0x0000FF00);
+}
+
+
 int add (int x, int y, int z) {return x + y;}
 int sub (int x, int y, int z) {return x - y;}
 int rsb (int x, int y, int z) {return y - x;}
