@@ -9,7 +9,7 @@ Build a binary with:
 
     make EXAMPLE=<fragment>
 
-Where <fragment> is one of the xxx.frag.c files in the source directory.
+Where `<fragment>` is one of the xxx.frag.c files in the source directory.
 
 Then run the resultant 'aha' with the number of target instructions.
 
