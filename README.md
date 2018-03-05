@@ -18,7 +18,9 @@ Then run the resultant 'aha' with the number of target instructions.
 Enjoy!
 
 
-Presentation
-------------
+Related Material
+----------------
+
+In January 2015 I wrote [an article about discovering branchless code sequences using Aha!](http://www.davespace.co.uk/blog/20150131-branchless-sequences.html).
 
 In September 2016 I gave [a presentation about superoptimisers](http://slides.com/dpt/aha#/) to my then colleagues at [Inside Secure](https://www.insidesecure.com/).
